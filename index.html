@@ -1,0 +1,58 @@
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>🧠 Néo – Chat IA Matrix</title>
+  <style>
+    body { background: black; color: #0F0; font-family: monospace; padding: 20px; }
+    h1 { text-align: center; }
+    #chat { max-width: 600px; margin: auto; border: 1px solid #0F0; padding: 10px; height: 60vh; overflow-y: auto; }
+    .user { color: #00FFAA; }
+    .neo { color: #99FF00; margin-left: 20px; }
+    input[type=text] {
+      width: 90%; background: black; color: #0F0; border: 1px solid #0F0;
+      padding: 10px; font-size: 16px; margin: 20px auto; display: block;
+    }
+    button {
+      background-color: black; color: #00FF00; border: 1px solid #00FF00;
+      font-size: 18px; padding: 10px 20px; margin: 10px auto; display: block;
+      font-family: monospace; cursor: pointer;
+    }
+    button:hover { background-color: #001100; }
+  </style>
+</head>
+<body>
+  <h1>🧠 Néo – Chat IA Matrix</h1>
+  <button onclick="scrollToChat()">→ Allons vers Néo</button>
+  <div id="chat"></div>
+  <input type="text" id="userInput" placeholder="Tape ton message et appuie sur Entrée" autofocus>
+  <script>
+    const chat = document.getElementById('chat');
+    const input = document.getElementById('userInput');
+    function printMessage(from, text) {
+      const msg = document.createElement('div');
+      msg.className = from;
+      msg.textContent = from === 'user' ? '🧍‍♂️ Toi : ' + text : '🤖 Néo : « ' + text + ' »';
+      chat.appendChild(msg); chat.scrollTop = chat.scrollHeight;
+    }
+    function simulateNeoResponse(text) {
+      return text.split('').reverse().join('');
+    }
+    input.addEventListener('keydown', function(e) {
+      if (e.key === 'Enter' && input.value.trim() !== '') {
+        const userText = input.value.trim();
+        printMessage('user', userText);
+        input.value = '';
+        setTimeout(() => {
+          const response = simulateNeoResponse(userText);
+          printMessage('neo', response);
+        }, 600);
+      }
+    });
+    function scrollToChat() {
+      document.getElementById('chat').scrollIntoView({ behavior: 'smooth' });
+    }
+  </script>
+</body>
+</html>
