@@ -3,39 +3,56 @@
 <html lang="fr">
 <head>
   <meta charset="UTF-8">
-  <title>Matrix IA Web</title>
+  <title>🧠 Néo – Chat IA Matrix</title>
   <style>
-    body { margin: 0; overflow: hidden; background: black; }
-    canvas { position: absolute; top: 0; left: 0; z-index: -1; }
+    body { background: black; color: #0F0; font-family: monospace; padding: 20px; }
+    h1 { text-align: center; }
+    #chat { max-width: 600px; margin: auto; border: 1px solid #0F0; padding: 10px; height: 60vh; overflow-y: auto; }
+    .user { color: #00FFAA; }
+    .neo { color: #99FF00; margin-left: 20px; }
+    input[type=text] {
+      width: 90%; background: black; color: #0F0; border: 1px solid #0F0;
+      padding: 10px; font-size: 16px; margin: 20px auto; display: block;
+    }
+    button {
+      background-color: black; color: #00FF00; border: 1px solid #00FF00;
+      font-size: 18px; padding: 10px 20px; margin: 10px auto; display: block;
+      font-family: monospace; cursor: pointer;
+    }
+    button:hover { background-color: #001100; }
   </style>
 </head>
 <body>
-  <canvas id="matrixCanvas"></canvas>
+  <h1>🧠 Néo – Chat IA Matrix</h1>
+  <button onclick="scrollToChat()">→ Allons vers Néo</button>
+  <div id="chat"></div>
+  <input type="text" id="userInput" placeholder="Tape ton message et appuie sur Entrée" autofocus>
   <script>
-    const canvas = document.getElementById('matrixCanvas');
-    const ctx = canvas.getContext('2d');
-    canvas.height = window.innerHeight;
-    canvas.width = window.innerWidth;
-
-    const letters = Array(256).join("01").split("");
-    const fontSize = 10;
-    const columns = canvas.width / fontSize;
-    const drops = Array.from({ length: columns }).fill(1);
-
-    function drawMatrix() {
-      ctx.fillStyle = "rgba(0, 0, 0, 0.05)";
-      ctx.fillRect(0, 0, canvas.width, canvas.height);
-      ctx.fillStyle = "#0F0";
-      ctx.font = fontSize + "px monospace";
-      for (let i = 0; i < drops.length; i++) {
-        const text = letters[Math.floor(Math.random() * letters.length)];
-        ctx.fillText(text, i * fontSize, drops[i] * fontSize);
-        if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) drops[i] = 0;
-        drops[i]++;
-      }
+    const chat = document.getElementById('chat');
+    const input = document.getElementById('userInput');
+    function printMessage(from, text) {
+      const msg = document.createElement('div');
+      msg.className = from;
+      msg.textContent = from === 'user' ? '🧍‍♂️ Toi : ' + text : '🤖 Néo : « ' + text + ' »';
+      chat.appendChild(msg); chat.scrollTop = chat.scrollHeight;
     }
-
-    setInterval(drawMatrix, 33);
+    function simulateNeoResponse(text) {
+      return text.split('').reverse().join('');
+    }
+    input.addEventListener('keydown', function(e) {
+      if (e.key === 'Enter' && input.value.trim() !== '') {
+        const userText = input.value.trim();
+        printMessage('user', userText);
+        input.value = '';
+        setTimeout(() => {
+          const response = simulateNeoResponse(userText);
+          printMessage('neo', response);
+        }, 600);
+      }
+    });
+    function scrollToChat() {
+      document.getElementById('chat').scrollIntoView({ behavior: 'smooth' });
+    }
   </script>
 </body>
 </html>
